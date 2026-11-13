@@ -42,6 +42,8 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <filesystem>
+#include <fstream>
 #include <functional>
 #include <iomanip>
 #include <numeric>
@@ -1450,8 +1452,46 @@ void vtkF3DImguiActor::StartFrame(vtkOpenGLRenderWindow* renWin)
 }
 
 //----------------------------------------------------------------------------
+void RenderFinalShaderDropdown()
+{
+  namespace fs = std::filesystem;
+  const fs::path dir = fs::path(__FILE__).parent_path() / "../../../final_shaders";
+
+  ImGui::SetNextWindowPos(
+    ImVec2(ImGui::GetMainViewport()->WorkSize.x, 0.f), ImGuiCond_Always, ImVec2(1.f, 0.f));
+  ImGui::Begin("FinalShaderDropdown", nullptr,
+    ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
+  if (ImGui::BeginCombo("", "Select Shader"))
+  {
+    std::error_code err_code;
+    for (const fs::directory_entry& entry : fs::directory_iterator(dir, err_code))
+    {
+      std::string fileName = entry.path().filename().string();
+      std::string filePath = entry.path().string();
+
+      if (ImGui::Selectable(fileName.c_str()))
+      {
+        std::ifstream file(filePath.c_str());
+        std::string shaderCode;
+        std::string line;
+        while (std::getline(file, line))
+        {
+          shaderCode += line + "\n";
+        }
+        std::string command = "set render.effect.final_shader `" + shaderCode + "`";
+        vtkOutputWindow::GetInstance()->InvokeEvent(
+          vtkF3DUserEvents::TriggerEvent, (void*)command.c_str());
+      }
+    }
+    ImGui::EndCombo();
+  }
+  ImGui::End();
+}
+
+//----------------------------------------------------------------------------
 void vtkF3DImguiActor::EndFrame(vtkOpenGLRenderWindow* renWin)
 {
+  ::RenderFinalShaderDropdown();
   ImGui::Render();
   this->Pimpl->RenderDrawData(renWin, ImGui::GetDrawData());
 }
