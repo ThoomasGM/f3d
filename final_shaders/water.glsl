@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Water
-// Authors : Jules Caron <jules.caron44@gmail.com>
+// Authors : Jules Caron
 // Ref     : Tileable water caustic by David Hoskins - https://www.shadertoy.com/view/MdlXz8
 //           (original water turbulence effect by joltz0r, GLSL Sandbox)
 // License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)

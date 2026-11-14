@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Dithering
-// Authors : Erwan Le Grand <erwan.legrand49@gmail.com>
+// Authors : Erwan Le Grand
 // Ref     : The Art of Dithering and Retro Shading for the Web by Maxime Heckel
 //           https://blog.maximeheckel.com/posts/the-art-of-dithering-and-retro-shading-web/
 //           (code from https://github.com/MaximeHeckel/blog.maximeheckel.com,

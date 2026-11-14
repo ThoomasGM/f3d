@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Sobel
-// Authors : mno <alex.dreau@epita.fr>
+// Authors : mno
 // Ref     : Basic sobel filter by Jeroen Baert (www.forceflow.be) - https://www.shadertoy.com/view/Xdf3Rf
 // License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
 // ---------------------------------------------------------------------------

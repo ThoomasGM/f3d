@@ -3,7 +3,7 @@
 
 // ---------------------------------------------------------------------------
 // Name    : Aura
-// Authors : Palpatoche8 <scheepers.thomas78@gmail.com>
+// Authors : Palpatoche8
 // Ref     : Original work
 // License : BSD-3-Clause (F3D)
 // ---------------------------------------------------------------------------

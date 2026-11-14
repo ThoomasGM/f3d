@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Negatif
-// Authors : lance-leau <lancelot.dou7@gmail.com>
+// Authors : lance-leau
 // Ref     : Original work
 // License : BSD-3-Clause (F3D)
 // ---------------------------------------------------------------------------

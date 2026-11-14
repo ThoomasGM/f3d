@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Halftone
-// Authors : klervi.choblet <klervi.choblet@epita.fr>
+// Authors : klervi.choblet
 // Ref     : Dot Screen / Halftone by starea (Ruofei Du) - https://www.shadertoy.com/view/4sBBDK
 //           (itself based on https://www.shadertoy.com/view/lsSfWV)
 // License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)

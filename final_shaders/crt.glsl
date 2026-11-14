@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : CRT
-// Authors : Jules Caron <jules.caron44@gmail.com>
+// Authors : Jules Caron
 // Ref     : Original work
 // License : BSD-3-Clause (F3D)
 // ---------------------------------------------------------------------------

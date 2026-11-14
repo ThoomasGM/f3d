@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Old movie
-// Authors : mno <alex.dreau@epita.fr>
+// Authors : mno
 // Ref     : Old movie by picolocolo - https://www.shadertoy.com/view/mslfD8
 // License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
 // ---------------------------------------------------------------------------

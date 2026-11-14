@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Radial blur
-// Authors : mno <alex.dreau@epita.fr>
+// Authors : mno
 // Ref     : Full Scene Radial Blur by Shane - https://www.shadertoy.com/view/XsKGRW
 //           (see original author notes below)
 // License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
