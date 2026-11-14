@@ -1,3 +1,10 @@
+// ---------------------------------------------------------------------------
+// Name    : Temporal echo
+// Authors : thomas.graveline-mercier <thomas.graveline-mercier@epita.fr>
+// Ref     : Original work
+// License : BSD-3-Clause (F3D)
+// ---------------------------------------------------------------------------
+
 uniform float motionThreshold = 0.06; // slider(0.0, 0.5)
 uniform float maxMotion = 0.12;       // slider(0.01, 1.0)
 uniform float maxDecay = 0.75;        // slider(0.0, 1.0)
