@@ -1,16 +1,3 @@
-<<<<<<< Updated upstream
-// Glow: Based on https://learnopengl.com/Advanced-Lighting/Bloom
-// God rays: Based on GPU Gems 3 ch.13 "Volumetric Light Scattering as a Post-Process"
-
-
-const vec3 AURA_COLOR = vec3(1.0, 0.8, 0.4);
-const vec3 CORE_COLOR = vec3(1.0, 1.0, 0.9);
-const float AURA_RADIUS = 0.07;
-const float AURA_STRENGTH = 1.5;
-const float RIM_STRENGTH = 0.6;
-const float RAYS_STRENGTH = 0.30;
-const float BG_THRESHOLD = 0.03;
-=======
 // ---------------------------------------------------------------------------
 // Name    : Aura
 // Authors : Palpatoche8 <scheepers.thomas78@gmail.com>
@@ -27,7 +14,6 @@ const float RAYS_STRENGTH = 0.30; // slider(0.0, 1.0)
 const float BG_THRESHOLD = 0.03; // slider(0.0, 0.2)
 const int DIRS = 16; // slider(4, 32)
 const int STEPS = 6; // slider(1, 12)
->>>>>>> Stashed changes
 
 
 float objectMask(vec2 uv, vec3 bg)
