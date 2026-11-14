@@ -5,10 +5,6 @@
 const float PI = 3.1415926535897932384626433832795;
 const float PI180 = float(PI / 180.0);
 
-float greyScale(in vec3 col) {
-    return dot(col, vec3(0.2126, 0.7152, 0.0722));
-}
-
 mat2 rotate2d(float angle)
 {
     return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
