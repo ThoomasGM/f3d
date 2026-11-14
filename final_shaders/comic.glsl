@@ -5,9 +5,9 @@
 // License : BSD-3-Clause (F3D)
 // ---------------------------------------------------------------------------
 
-float saturation = 1.3;      // slider(0.0, 3.0)
-float levels = 5.0;          // slider(2.0, 16.0)
-float edge_threshold = 0.25; // slider(0.05, 0.5)
+uniform float saturation = 1.3;      // slider(0.0, 3.0)
+uniform float levels = 5.0;          // slider(2.0, 16.0)
+uniform float edge_threshold = 0.25; // slider(0.05, 0.5)
 
 float lum(vec3 c) {
     return dot(c, vec3(0.299, 0.587, 0.114));
