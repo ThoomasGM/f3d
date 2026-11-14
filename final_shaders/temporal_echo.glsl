@@ -5,11 +5,12 @@
 // License : BSD-3-Clause (F3D)
 // ---------------------------------------------------------------------------
 
-uniform float motionThreshold = 0.06; // slider(0.0, 0.5)
-uniform float maxMotion = 0.12;       // slider(0.01, 1.0)
-uniform float maxDecay = 0.75;        // slider(0.0, 1.0)
-uniform float offsetX = 0.003;        // slider(0.0, 0.05)
-uniform float offsetY = 0.0015;       // slider(0.0, 0.05)
+uniform float trigger = 0.06;      // slider(0.0, 0.5)
+uniform float response = 0.12;     // slider(0.01, 1.0)
+uniform float persistence = 0.75;  // slider(0.0, 1.0)
+uniform float rgbSplitX = 0.003;   // slider(0.0, 0.05)
+uniform float rgbSplitY = 0.0015;  // slider(0.0, 0.05)
+
 
 // Temporal with the entire frame and rgb différent offsets
 vec4 pixel(vec2 uv)
@@ -21,19 +22,19 @@ vec4 pixel(vec2 uv)
     // Motion delta
     float motion = length(current.rgb - pastClean.rgb);
 
-    if (motion < motionThreshold)
+    if (motion < trigger)
     {
         return current;
     }
 
     // Speed factor [0, 1]
-    float motionFactor = smoothstep(motionThreshold, maxMotion, motion);
+    float motionFactor = smoothstep(trigger, response, motion);
     
     // Trail decay (0 if still)
-    float dynamicDecay = mix(0.0, maxDecay, motionFactor);
+    float dynamicDecay = mix(0.0, persistence, motionFactor);
 
     // Only during movement
-    vec2 offset = vec2(offsetX, offsetY) * motionFactor;
+    vec2 offset = vec2(rgbSplitX, rgbSplitY) * motionFactor;
 
     float r = texture(history, uv + offset).r;
     float g = pastClean.g;
