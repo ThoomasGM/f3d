@@ -860,6 +860,15 @@ public:
                 continue;
               }
 
+              // handle deprecated options
+              if (key == "raytracing")
+              {
+                f3d::log::warn(
+                  "Option 'raytracing' is deprecated, use 'rendering-mode=ospray' instead");
+                libOptions.render.mode = "ospray";
+                continue;
+              }
+
               // Convert key into a libf3d option name if possible
               std::string keyForLog = key;
               for (const auto& libf3dOption : F3DOptionsTools::ConvertToLibf3dOptions(key, value))
@@ -1093,7 +1102,7 @@ public:
     if (!this->AppOptions.NoRender)
     {
       f3d::window& window = this->Engine->getWindow();
-      if (this->AppOptions.Resolution.size() == 2)
+      if (this->AppOptions.Resolution.size() == 2 && this->AppOptions.RenderingBackend != "xr")
       {
         const double dpiScale = window.getDPIScale();
         const int width = static_cast<int>(this->AppOptions.Resolution[0] * dpiScale);
@@ -1104,7 +1113,7 @@ public:
 
         window.setSize(width, height);
       }
-      else if (!this->AppOptions.Resolution.empty())
+      else if (!this->AppOptions.Resolution.empty() && this->AppOptions.RenderingBackend != "xr")
       {
         f3d::log::warn("Provided resolution could not be applied");
       }
@@ -1604,6 +1613,13 @@ int F3DStarter::Start(int argc, char** argv)
       {
         this->Internals->Engine = std::make_unique<f3d::engine>(f3d::engine::createWGL(offscreen));
       }
+      else if (this->Internals->AppOptions.RenderingBackend == "xr")
+      {
+        // OpenXR not tested yet
+        // LCOV_EXCL_START
+        this->Internals->Engine = std::make_unique<f3d::engine>(f3d::engine::createXR());
+        // LCOV_EXCL_STOP
+      }
       else
       {
         if (this->Internals->AppOptions.RenderingBackend != "auto")
@@ -1634,6 +1650,7 @@ int F3DStarter::Start(int argc, char** argv)
       return EXIT_FAILURE;
     }
 
+    this->Internals->Engine->setResourcesPath(F3DSystemTools::GetBinaryResourceDirectory());
     this->ResetWindowName();
 
     this->Internals->Engine->getWindow().setUseHDRICache(!this->Internals->AppOptions.NoCache);

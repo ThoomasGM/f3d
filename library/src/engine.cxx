@@ -142,8 +142,16 @@ engine::engine(const std::optional<window::Type>& windowType, bool offscreen,
 
   this->Internals->Options = std::make_unique<options>();
 
-  this->Internals->Window = std::make_unique<detail::window_impl>(
-    *this->Internals->Options, windowType, offscreen, loader, id);
+  try
+  {
+    this->Internals->Window = std::make_unique<detail::window_impl>(
+      *this->Internals->Options, windowType, offscreen, loader, id);
+  }
+  catch (const engine::no_window_exception& ex)
+  {
+    delete this->Internals;
+    throw ex;
+  }
 
   if (!cachePath.empty())
   {
@@ -209,6 +217,12 @@ engine engine::createEGL()
 engine engine::createOSMesa()
 {
   return { window::Type::OSMESA, true, context::osmesa() };
+}
+
+//----------------------------------------------------------------------------
+engine engine::createXR()
+{
+  return { window::Type::XR, false, nullptr };
 }
 
 //----------------------------------------------------------------------------
@@ -477,6 +491,7 @@ std::map<std::string, bool> engine::getRenderingBackendList()
   backends["cocoa"] = engine::internals::BackendAvailable(context::cocoa);
   backends["egl"] = engine::internals::BackendAvailable(context::egl);
   backends["osmesa"] = engine::internals::BackendAvailable(context::osmesa);
+  backends["xr"] = engine::internals::BackendAvailable(context::xr);
 
   return backends;
 }
@@ -663,6 +678,12 @@ engine::libInformation engine::getLibInfo()
   libInfo.BuildSystem = detail::LibBuildSystem;
   libInfo.Compiler = detail::LibCompiler;
 
+#if F3D_MODULE_ANARI
+  libInfo.Modules["ANARI"] = true;
+#else
+  libInfo.Modules["ANARI"] = false;
+#endif
+
 #if F3D_MODULE_RAYTRACING
   libInfo.Modules["Raytracing"] = true;
 #else
@@ -691,6 +712,12 @@ engine::libInformation engine::getLibInfo()
   libInfo.Modules["FFmpeg"] = true;
 #else
   libInfo.Modules["FFmpeg"] = false;
+#endif
+
+#if F3D_MODULE_MESHOPT
+  libInfo.Modules["MeshOptimizer"] = true;
+#else
+  libInfo.Modules["MeshOptimizer"] = false;
 #endif
 
   const std::string vtkVersion = std::string(vtkVersion::GetVTKVersionFull());
@@ -754,6 +781,19 @@ fs::path engine::getCachePath() const
 }
 
 //----------------------------------------------------------------------------
+engine& engine::setResourcesPath(const fs::path& resourcesPath)
+{
+  this->Internals->Window->SetResourcesPath(resourcesPath);
+  return *this;
+}
+
+//----------------------------------------------------------------------------
+fs::path engine::getResourcesPath() const
+{
+  return this->Internals->Window->GetResourcesPath();
+}
+
+//----------------------------------------------------------------------------
 engine::no_window_exception::no_window_exception(const std::string& what)
   : exception(what)
 {
@@ -779,6 +819,12 @@ engine::cache_exception::cache_exception(const std::string& what)
 
 //----------------------------------------------------------------------------
 engine::statefile_exception::statefile_exception(const std::string& what)
+  : exception(what)
+{
+}
+
+//----------------------------------------------------------------------------
+engine::resource_exception::resource_exception(const std::string& what)
   : exception(what)
 {
 }

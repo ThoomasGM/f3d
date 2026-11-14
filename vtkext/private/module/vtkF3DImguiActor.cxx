@@ -42,6 +42,8 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <filesystem>
+#include <fstream>
 #include <functional>
 #include <iomanip>
 #include <numeric>
@@ -722,12 +724,12 @@ void vtkF3DImguiActor::RenderDropZone()
     }
 
     // Draw left and right line
-    for (float y = p0.y; y < p1.y; y += tickLength + tickSpaceH)
+    for (float y = p0.y + 1; y < p1.y; y += tickLength + tickSpaceH)
     {
       const float x1 = p1.x - halfTickThickness;
       const float y1 = std::min(p1.y, y + tickLength);
-      drawList->AddLine(ImVec2(p0.x, y), ImVec2(p0.x, y1), color, tickThickness);
-      drawList->AddLine(ImVec2(x1, y), ImVec2(x1, y1), color, tickThickness);
+      drawList->AddLine(ImVec2(p0.x + 1, y), ImVec2(p0.x, y1), color, tickThickness);
+      drawList->AddLine(ImVec2(x1 + 1, y), ImVec2(x1, y1), color, tickThickness);
     }
 
     ImGui::End();
@@ -1450,8 +1452,54 @@ void vtkF3DImguiActor::StartFrame(vtkOpenGLRenderWindow* renWin)
 }
 
 //----------------------------------------------------------------------------
+void RenderFinalShaderDropdown()
+{
+  namespace fs = std::filesystem;
+  const fs::path dir = fs::path(__FILE__).parent_path() / "../../../final_shaders";
+  static std::string selectedShader;
+
+  ImGui::SetNextWindowPos(
+    ImVec2(ImGui::GetMainViewport()->WorkSize.x, 0.f), ImGuiCond_Always, ImVec2(1.f, 0.f));
+  ImGui::Begin("FinalShaderDropdown", nullptr,
+    ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
+  const char* preview = selectedShader.empty() ? "Select Shader" : selectedShader.c_str();
+  if (ImGui::BeginCombo("##FinalShader", preview))
+  {
+    std::error_code err_code;
+    for (const fs::directory_entry& entry : fs::directory_iterator(dir, err_code))
+    {
+      std::string fileName = entry.path().filename().string();
+      std::string filePath = entry.path().string();
+      const bool isSelected = (fileName == selectedShader);
+      if (ImGui::Selectable(fileName.c_str(), isSelected))
+      {
+        selectedShader = fileName;
+        std::ifstream file(filePath.c_str());
+        std::string shaderCode;
+        std::string line;
+        while (std::getline(file, line))
+        {
+          shaderCode += line + "\n";
+        }
+        std::string command = "set render.effect.final_shader `" + shaderCode + "`";
+        vtkOutputWindow::GetInstance()->InvokeEvent(
+          vtkF3DUserEvents::TriggerEvent, (void*)command.c_str());
+      }
+      if (isSelected)
+      {
+        ImGui::SetItemDefaultFocus();
+      }
+    }
+    ImGui::EndCombo();
+  }
+  ImGui::End();
+}
+
+
+//----------------------------------------------------------------------------
 void vtkF3DImguiActor::EndFrame(vtkOpenGLRenderWindow* renWin)
 {
+  ::RenderFinalShaderDropdown();
   ImGui::Render();
   this->Pimpl->RenderDrawData(renWin, ImGui::GetDrawData());
 }

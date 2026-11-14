@@ -42,6 +42,8 @@ class vtkOrientationMarkerWidget;
 class vtkScalarBarActor;
 class vtkSkybox;
 class vtkTextActor;
+class vtkLightRepresentation;
+class vtkLightWidget;
 
 class vtkF3DRenderer : public vtkOpenGLRenderer
 {
@@ -105,6 +107,27 @@ public:
     ANY
   };
 
+  /**
+   * Enum listing possible normal glyph shapes.
+   */
+  enum class NormalGlyphShape : unsigned char
+  {
+    ARROW,
+    CONE,
+    CYLINDER,
+    LINE
+  };
+
+  /**
+   * Enum listing possible rendering modes.
+   */
+  enum class RenderingMode : unsigned char
+  {
+    OPENGL,
+    OSPRAY,
+    ANARI
+  };
+
   ///@{
   /**
    * Set visibility of different actors
@@ -153,6 +176,10 @@ public:
   void SetGridColor(const std::vector<double>& color);
   void SetGridOpacity(const double strength);
   void SetGridReflection(const double strength);
+  void SetGridShadow(const double strength);
+  void SetShadows(bool use);
+  void SetShadowExponentialConstant(double constant);
+  void SetShadowResolution(int resolution);
   void SetAxesColor(const std::vector<double>& colorXAxis, const std::vector<double>& colorYAxis,
     const std::vector<double>& colorZAxis);
   void SetSceneHierarchyMaxWidth(const int width);
@@ -173,7 +200,8 @@ public:
   /**
    * Set usages and configurations of different render passes
    */
-  void SetUseRaytracing(bool use);
+  void SetRenderingMode(RenderingMode mode);
+  void SetAnariLibrary(const std::string& anariLibrary);
   void SetUseRaytracingDenoiser(bool use);
   void SetBlendingMode(BlendingMode mode);
   BlendingMode GetBlendingMode() const;
@@ -217,9 +245,14 @@ public:
   void Render() override;
 
   /**
-   * Reimplemented to account for grid actor
+   * Reimplemented to account for grid actor and xr usage
    */
   void ResetCameraClippingRange() override;
+
+  /**
+   * Reset camera clipping range
+   */
+  void ResetCameraClippingRange(const double bounds[6]) override;
 
   /**
    * Set properties on each imported actors and also configure the coloring
@@ -237,6 +270,11 @@ public:
    * return the number of lights in the renderer.
    */
   int UpdateLights() override;
+
+  /**
+   * Updates all light representations
+   */
+  void UpdateLightRepresentations();
 
   /**
    * Initialize the renderer actors and flags.
@@ -387,6 +425,16 @@ public:
    * Sets the GlyphScaleMultiplier
    */
   void SetNormalGlyphScaleMultiplier(double multiplier);
+
+  /**
+   * Sets the color of the normal glyphs
+   */
+  void SetNormalGlyphColor(const std::array<double, 3>& color);
+
+  /**
+   * Sets the shape of the normal glyphs
+   */
+  void SetNormalGlyphShape(const NormalGlyphShape& shape);
 
   /**
    * Set the visibility of the point sprites actor.
@@ -656,6 +704,18 @@ public:
    */
   bool CaptureVideoFrame(std::byte* yPlane, std::byte* uPlane, std::byte* vPlane);
 
+  /**
+   * Set XR mode
+   */
+  void SetXRMode(bool enable, bool showBbox = false);
+
+  /**
+   * Changes the light representable visibility
+   * if visible is true, Then all the representables will be turned on
+   * else all representables will not be visible
+   */
+  void SetLightRepresentationVisibility(bool visible);
+
 private:
   vtkF3DRenderer();
   ~vtkF3DRenderer() override;
@@ -802,6 +862,16 @@ private:
    */
   void SetArrayIsCellData(const std::optional<bool>& arrayIsCellData);
 
+  /**
+   * Create a camera-facing bounding box.
+   */
+  vtkBoundingBox CreateCameraFacingBoundingBox(vtkCamera* camera, double scale, double distance);
+
+  /**
+   * Align the scene to the given bounds.
+   */
+  void AlignSceneToBounds(const vtkBoundingBox& bounds);
+
   vtkSmartPointer<vtkOrientationMarkerWidget> AxisWidget;
   vtkSmartPointer<vtkCameraOrientationWidget> ModernAxisWidget;
   vtkSmartPointer<vtkCameraOrientationRepresentation> ModernAxisRepresentation;
@@ -811,10 +881,14 @@ private:
   double ModernAxisBackdropOpacity = 0.0;
   double TotalTime = 0.0;
 
-  // Does vtk version support GridAxesActor
-#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9, 4, 20250513)
   vtkSmartPointer<vtkGridAxesActor3D> GridAxesActor;
-#endif
+
+  struct LightRepresentationBundle
+  {
+    vtkSmartPointer<vtkLightRepresentation> representation;
+    vtkSmartPointer<vtkLightWidget> widget;
+  };
+  std::map<vtkLight*, LightRepresentationBundle> LightRepresentations;
 
   vtkNew<vtkActor> GridActor;
   vtkNew<vtkF3DOpenGLGridMapper> GridMapper;
@@ -842,13 +916,13 @@ private:
   bool HDRISphericalHarmonicsConfigured = false;
   bool HDRISpecularConfigured = false;
   bool HDRISkyboxConfigured = false;
+  bool XrBoundingBoxConfigured = false;
 
+  bool LightRepresentationVisible = false;
   bool GridVisible = false;
   bool GridAbsolute = false;
   bool AxisVisible = false;
-#if VTK_VERSION_NUMBER >= VTK_VERSION_CHECK(9, 4, 20250513)
   bool AxesGridVisible = false;
-#endif
   std::optional<bool> EdgeVisible;
   bool TimerVisible = false;
   bool FilenameVisible = false;
@@ -862,7 +936,8 @@ private:
   bool DropZoneLogoVisible = false;
   bool HDRISkyboxVisible = false;
   bool ArmatureVisible = false;
-  bool UseRaytracing = false;
+  RenderingMode CurrentRenderingMode = RenderingMode::OPENGL;
+  std::string AnariLibrary = "environment";
   bool UseRaytracingDenoiser = false;
   AntiAliasingMode AntiAliasingModeEnabled = AntiAliasingMode::NONE;
   BlendingMode BlendingModeEnabled = BlendingMode::NONE;
@@ -885,6 +960,10 @@ private:
   double GridColor[3] = { 0.0, 0.0, 0.0 };
   double GridOpacity = 1.0;
   double GridReflection = 0.0;
+  double GridShadow = 0.4;
+  bool UseShadows = true;
+  double ShadowExponentialConstant = 25.0;
+  int ShadowResolution = 1024;
 
   double ColorAxisX[3] = { 0.0, 0.0, 0.0 };
   double ColorAxisY[3] = { 0.0, 0.0, 0.0 };
@@ -967,6 +1046,8 @@ private:
   bool ScalarBarVisible = false;
   bool UseNormalGlyphs = false;
   double NormalGlyphScaleMultiplier = 1.0;
+  std::array<double, 3> NormalGlyphColor = { 1.0, 1.0, 1.0 };
+  NormalGlyphShape GlyphShape = NormalGlyphShape::ARROW;
   bool UsePointSprites = false;
   bool UseVolume = false;
   bool UseInverseOpacityFunction = false;
@@ -983,6 +1064,9 @@ private:
   bool PointSpritesUseInstancing = false;
 
   std::optional<bool> Unlit;
+
+  bool UseXR = false;
+  vtkNew<vtkActor> XRBBoxActor;
 };
 
 #endif

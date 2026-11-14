@@ -6,19 +6,12 @@ set(F3D_VTK_MODULES
   VTK::CommonColor
   VTK::IOImage
   VTK::InteractionWidgets
+  VTK::RenderingGridAxes
   f3d::vtkext
   f3d::vtkextPrivate
 )
 
 # Check modules
-
-if(VTK_VERSION VERSION_GREATER_EQUAL 9.4.20250513)
-  if(TARGET VTK::RenderingGridAxes)
-    set(F3D_VTK_MODULES ${F3D_VTK_MODULES} VTK::RenderingGridAxes)
-  else()
-    message(FATAL_ERROR "VTK::RenderingGridAxes is not found, please enable it")
-  endif()
-endif()
 
 if(F3D_MODULE_RAYTRACING)
   if(TARGET VTK::RenderingRayTracing)
@@ -26,6 +19,31 @@ if(F3D_MODULE_RAYTRACING)
     set(F3D_VTK_MODULES ${F3D_VTK_MODULES} VTK::RenderingRayTracing)
   else()
     message(FATAL_ERROR "F3D_MODULE_RAYTRACING option is enabled but VTK::RenderingRayTracing is not found")
+  endif()
+endif()
+
+if (F3D_MODULE_OPENXR)
+  if(TARGET VTK::RenderingOpenXR)
+    message(STATUS "VTK::RenderingOpenXR module found")
+    set(F3D_VTK_MODULES ${F3D_VTK_MODULES} VTK::RenderingOpenXR)
+
+    file(COPY "${F3D_SOURCE_DIR}/resources/xr_actions_manifests/"
+        DESTINATION "${CMAKE_BINARY_DIR}/share/f3d/xr_actions_manifests/")
+
+    install(
+      DIRECTORY "${F3D_SOURCE_DIR}/resources/xr_actions_manifests/"
+      DESTINATION "${f3d_resources_dir}/xr_actions_manifests/")
+  else()
+    message(FATAL_ERROR "F3D_MODULE_OPENXR option is enabled but VTK::RenderingOpenXR is not found")
+  endif()
+endif()
+
+if(F3D_MODULE_ANARI)
+  if(TARGET VTK::RenderingAnariOpenGL)
+    message(STATUS "VTK::RenderingAnariOpenGL module found")
+    set(F3D_VTK_MODULES ${F3D_VTK_MODULES} VTK::RenderingAnariOpenGL)
+  else()
+    message(FATAL_ERROR "F3D_MODULE_ANARI option is enabled but VTK::RenderingAnariOpenGL is not found. (VTK > 9.7.20260914 is needed)")
   endif()
 endif()
 
@@ -224,6 +242,11 @@ if (F3D_MODULE_CLIP)
   target_compile_definitions(libf3d PRIVATE F3D_MODULE_CLIP)
 endif ()
 
+# anari
+if (F3D_MODULE_ANARI)
+  target_compile_definitions(libf3d PRIVATE F3D_MODULE_ANARI)
+endif ()
+
 # raytracing
 if (F3D_MODULE_RAYTRACING)
   target_compile_definitions(libf3d PRIVATE F3D_MODULE_RAYTRACING)
@@ -233,6 +256,16 @@ endif ()
 if (F3D_MODULE_FFMPEG)
   target_compile_definitions(libf3d PRIVATE F3D_MODULE_FFMPEG)
 endif ()
+
+# meshoptimizer
+if (F3D_MODULE_MESHOPT)
+  target_compile_definitions(libf3d PRIVATE F3D_MODULE_MESHOPT)
+endif ()
+
+# XR
+if (F3D_MODULE_OPENXR)
+  target_compile_definitions(libf3d PRIVATE F3D_MODULE_OPENXR)
+endif()
 
 if(F3D_STRICT_BUILD AND MSVC)
   # There are warnings in VTK related to deprecated features in C++17
