@@ -611,6 +611,18 @@ void vtkF3DRenderer::ConfigureRenderPasses()
       userP->SetUserShader(this->FinalShader.value().c_str());
       userP->SetDelegatePass(renderingPass);
       renderingPass = userP;
+
+      /*
+      std::string uniformName;
+      float defaultValue;
+      float minValue;
+      float maxValue;
+      std::sscanf(this->FinalShader.value().c_str(),
+      "uniform float %63[^;] = %f; // slider(%f, %f)", uniformName, &defaultValue, &minValue,
+      &maxValue);
+
+      userP->QuadHelper->Program->SetUniformf(uniformName.c_str(), defaultValue);
+      */
     }
     else
     {
@@ -1341,13 +1353,21 @@ void vtkF3DRenderer::AlignSceneToBounds(const vtkBoundingBox& bounds)
 
   vtkNew<vtkMatrix4x4> upMatrix;
   const double m[16] = {
-    right[0], right[1], right[2],
+    right[0],
+    right[1],
+    right[2],
     0, //
-    up[0], up[1], up[2],
+    up[0],
+    up[1],
+    up[2],
     0, //
-    front[0], front[1], front[2],
+    front[0],
+    front[1],
+    front[2],
     0, //
-    0, 0, 0,
+    0,
+    0,
+    0,
     1, //
   };
   upMatrix->DeepCopy(m);
@@ -2160,6 +2180,22 @@ void vtkF3DRenderer::SetFinalShader(const std::optional<std::string>& finalShade
   {
     this->FinalShader = finalShader;
     this->RenderPassesConfigured = false;
+
+    std::string uniformName;
+    float defaultValue;
+    float minValue;
+    float maxValue;
+
+    if (this->FinalShader.value().length() != 0)
+    {
+
+      int filledVarCount = std::sscanf(this->FinalShader.value().c_str(),
+        " uniform float %63[^ =] = %f ; // slider(%f, %f)", uniformName.c_str(), &defaultValue,
+        &minValue, &maxValue);
+
+      this->SetShaderSliders(uniformName, defaultValue, minValue, maxValue,
+        filledVarCount != EOF && filledVarCount == 4);
+    }
   }
 }
 
@@ -3622,7 +3658,7 @@ void vtkF3DRenderer::UpdateLightRepresentations()
 
   // remove unwanted light representations
   for (auto repItr = this->LightRepresentations.begin();
-       repItr != this->LightRepresentations.end();)
+    repItr != this->LightRepresentations.end();)
   {
     if (visitedLights.count(repItr->first))
     {

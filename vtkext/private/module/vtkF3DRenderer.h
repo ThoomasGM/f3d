@@ -26,6 +26,8 @@
 #include <filesystem>
 #include <map>
 #include <optional>
+#include <string>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -215,6 +217,31 @@ public:
   void SetRaytracingSamples(int samples);
   void SetBackfaceType(const std::optional<std::string>& backfaceType);
   void SetFinalShader(const std::optional<std::string>& finalShader);
+
+  struct ShaderSlider
+  {
+    std::string name;
+    float defaultValue;
+    float min;
+    float max;
+    bool isActive;
+  };
+
+  ShaderSlider shaderSlider;
+  ShaderSlider GetShaderSlider()
+  {
+    return this->shaderSlider;
+  }
+  void SetShaderSliders(
+    std::string _name, float _defaultValue, float _min, float _max, bool _isActive)
+  {
+    shaderSlider.name = _name;
+    shaderSlider.defaultValue = _defaultValue;
+    shaderSlider.min = _min;
+    shaderSlider.max = _max;
+    shaderSlider.isActive = _isActive;
+  }
+
   ///@}
 
   /**
