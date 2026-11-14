@@ -1,4 +1,9 @@
-// By : https://www.shadertoy.com/view/7clyWr
+// ---------------------------------------------------------------------------
+// Name    : Kamisuki
+// Authors : ThoomasGM
+// Ref     : https://www.shadertoy.com/view/7clyWr
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
 
 #define PI acos(-1.)
 

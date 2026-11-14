@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // Name    : Temporal echo
-// Authors : thomas.graveline-mercier <thomas.graveline-mercier@epita.fr>
+// Authors : ThoomasGM
 // Ref     : Original work
 // License : BSD-3-Clause (F3D)
 // ---------------------------------------------------------------------------

@@ -17,7 +17,7 @@ Créations originales des auteurs du projet.
 | `no_shader.glsl` | lance-leau |
 | `noir_et_blanc.glsl` | lance-leau |
 | `sepia.glsl` | mno |
-| `temporal_echo.glsl` | thomas.graveline-mercier |
+| `temporal_echo.glsl` | ThoomasGM |
 
 ## Shaders sous CC BY-NC-SA 3.0 — ⚠️ incompatibles avec BSD-3
 
@@ -28,7 +28,8 @@ défaut de Shadertoy s'applique, **Creative Commons BY-NC-SA 3.0**
 | Shader | Adapté par | Source | Auteur original |
 |---|---|---|---|
 | `crt.glsl` | Jules Caron | https://www.shadertoy.com/view/WsVSzV | kbjwes77 |
-| `halftone.glsl` | klervi.choblet | https://www.shadertoy.com/view/4sBBDK (basé sur https://www.shadertoy.com/view/lsSfWV) | starea (Ruofei Du) |
+| `halftone.glsl` | Kae712635 | https://www.shadertoy.com/view/4sBBDK (basé sur https://www.shadertoy.com/view/lsSfWV) | starea (Ruofei Du) |
+| `kamisuki.glsl` | ThoomasGM | https://www.shadertoy.com/view/7clyWr | iY0Yi (Shadertoy) |
 | `old_movie.glsl` | mno | https://www.shadertoy.com/view/mslfD8 | picolocolo |
 | `radial.glsl` | mno | https://www.shadertoy.com/view/XsKGRW | Shane (inspiré de Passion, IQ, mu6k) |
 | `sigmoid.glsl` | mno | https://www.shadertoy.com/view/MtX3z2 | Loadus |
