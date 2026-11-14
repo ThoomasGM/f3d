@@ -1,13 +1,20 @@
+// ---------------------------------------------------------------------------
+// Name    : Bloom
+// Authors : lance-leau <lancelot.dou7@gmail.com>
+// Ref     : Original work
+// License : BSD-3-Clause (F3D)
+// ---------------------------------------------------------------------------
+
+float threshold = 0.55; // slider(0.0, 1.0)
+float intensity = 1.5; // slider(0.0, 5.0)
+float spread = 1.0; // slider(0.1, 5.0)
+int radius = 15; // slider(1, 30)
+
 vec4 pixel(vec2 uv)
 {
     vec4 couleur = texture(source, uv);
 
     vec2 texelSize = 1.0 / vec2(textureSize(source, 0));
-
-    float threshold = 0.55;
-    float intensity = 1.5;
-    float spread = 1.0;
-    int radius = 15;
 
     vec3 bloom = vec3(0.0);
     float totalWeight = 0.0;

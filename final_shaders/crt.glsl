@@ -1,8 +1,12 @@
-// Based on the shader from shadertoy: https://www.shadertoy.com/view/WsVSzV
-// Based on the work of kbjwes77
+// ---------------------------------------------------------------------------
+// Name    : CRT
+// Authors : Jules Caron <jules.caron@epita.fr>
+// Ref     : CRT by kbjwes77 - https://www.shadertoy.com/view/WsVSzV
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
 
-float warp = 1.00;
-float scan = 2.00;
+float warp = 1.00; // slider(0.0, 2.0)
+float scan = 2.00; // slider(0.0, 2.0)
 
 vec4 pixel(vec2 uv)
 {

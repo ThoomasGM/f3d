@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Name    : Radial blur
+// Authors : mno <alex.dreau@epita.fr>
+// Ref     : Full Scene Radial Blur by Shane - https://www.shadertoy.com/view/XsKGRW
+//           (see original author notes below)
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
+
 /*
 	Full Scene Radial Blur
 	----------------------
@@ -29,6 +37,10 @@
   https://www.shadertoy.com/view/XsKGRW
 */
 
+float decay = 0.96; // slider(0.8, 1.0)
+float density = 0.5; // slider(0.0, 2.0)
+float weight = 0.1; // slider(0.0, 0.5)
+
 float hash( vec2 p ){ return fract(sin(dot(p, vec2(41, 289)))*45758.5453); }
 
 vec3 lOff(){    
@@ -46,9 +58,6 @@ vec3 lOff(){
 
 vec4 pixel(vec2 uv)
 {
-    float decay = 0.96;
-    float density = 0.5;
-    float weight = 0.1;
     vec3 l = lOff();
     vec2 tuv = uv - 0.5 - l.xy * 0.45;
     vec2 dTuv = tuv * density / 24.0;

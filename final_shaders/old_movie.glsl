@@ -1,4 +1,9 @@
-// og shader https://www.shadertoy.com/view/mslfD8
+// ---------------------------------------------------------------------------
+// Name    : Old movie
+// Authors : mno <alex.dreau@epita.fr>
+// Ref     : Old movie by picolocolo - https://www.shadertoy.com/view/mslfD8
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
 
 float noise1(float seed1,float seed2){
 return(

@@ -1,9 +1,15 @@
-//--------------------------------------------------------------------------
-// Based on : https://www.shadertoy.com/view/4sBBDK
-//-------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Name    : Halftone
+// Authors : klervi.choblet <klervi.choblet@epita.fr>
+// Ref     : Dot Screen / Halftone by starea (Ruofei Du) - https://www.shadertoy.com/view/4sBBDK
+//           (itself based on https://www.shadertoy.com/view/lsSfWV)
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
 
 const float PI = 3.1415926535897932384626433832795;
 const float PI180 = float(PI / 180.0);
+
+float angle = 20.0 * PI180; // slider(0.0, 1.5708)
 
 float greyScale(in vec3 col) {
     return dot(col, vec3(0.2126, 0.7152, 0.0722));
@@ -24,7 +30,6 @@ float dotScreen(in vec2 uv, in float angle, in float scale)
 vec4 pixel(vec2 uv)
 {
     vec3 col = texture(source, uv).rgb;
-    float angle = 20.0 * PI180;
     float scale = 0.75 + 0.15 * sin(time);
     float pattern = dotScreen(uv, angle, scale);
 

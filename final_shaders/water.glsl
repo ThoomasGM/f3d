@@ -1,8 +1,14 @@
-// Based on the shader from shadertoy: https://www.shadertoy.com/view/MdlXz8
-// Based on the work of David Hoskins and joltz0r
+// ---------------------------------------------------------------------------
+// Name    : Water
+// Authors : Jules Caron <jules.caron@epita.fr>
+// Ref     : Tileable water caustic by David Hoskins - https://www.shadertoy.com/view/MdlXz8
+//           (original water turbulence effect by joltz0r, GLSL Sandbox)
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
 
 float TAU = 6.28318530;
-int MAX_ITER = 5;
+int MAX_ITER = 5; // slider(1, 10)
+float inten = .005; // slider(0.001, 0.02)
 
 vec4 pixel(vec2 uv) 
 {
@@ -10,7 +16,6 @@ vec4 pixel(vec2 uv)
 
 	vec2 i = vec2(p);
 	float c = 1.0;
-	float inten = .005;
 
 	for (int n = 0; n < MAX_ITER; n++) 
 	{
