@@ -122,6 +122,10 @@ void vtkF3DUserRenderPass::Render(const vtkRenderState* s)
   else
   {
     this->QuadHelper->Program->SetUniformf("time", ren->GetTotalTime());
+    for (const auto& slider : ren->shaderSliders)
+    {
+      this->QuadHelper->Program->SetUniformf(slider.name.c_str(), slider.defaultValue);
+    }
   }
 
   ostate->vtkglDisable(GL_BLEND);

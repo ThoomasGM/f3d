@@ -11,6 +11,7 @@ Créations originales des auteurs du projet.
 |---|---|
 | `aura.glsl` | Palpatoche8 |
 | `bloom.glsl` | lance-leau |
+| `comic.glsl` | Kae712635 |
 | `gray.glsl` | mno |
 | `negatif.glsl` | lance-leau |
 | `no_shader.glsl` | lance-leau |
