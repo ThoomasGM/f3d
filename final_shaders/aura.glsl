@@ -2,12 +2,12 @@
 // God rays: Based on GPU Gems 3 ch.13 "Volumetric Light Scattering as a Post-Process"
 
 
-const vec3 AURA_COLOR = vec3(1.0, 0.8, 0.4);
+const vec3 AURA_COLOR = vec3(1.0, 0.8, 0.4); 
 const vec3 CORE_COLOR = vec3(1.0, 1.0, 0.9);
-const float AURA_RADIUS = 0.07;
-const float AURA_STRENGTH = 1.5;
+const float AURA_RADIUS = 0.07;             
+const float AURA_STRENGTH = 1.5;            // slider(0.1, 5)
 const float RIM_STRENGTH = 0.6;
-const float RAYS_STRENGTH = 0.30;
+const float RAYS_STRENGTH = 0.30;           // slider(0.01, 2)
 const float BG_THRESHOLD = 0.03;
 
 
