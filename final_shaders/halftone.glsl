@@ -11,10 +11,6 @@ const float PI180 = float(PI / 180.0);
 
 float angle = 20.0 * PI180; // slider(0.0, 1.5708)
 
-float greyScale(in vec3 col) {
-    return dot(col, vec3(0.2126, 0.7152, 0.0722));
-}
-
 mat2 rotate2d(float angle)
 {
     return mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
