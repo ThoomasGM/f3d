@@ -1,3 +1,7 @@
+// Glow: Based on https://learnopengl.com/Advanced-Lighting/Bloom
+// God rays: Based on GPU Gems 3 ch.13 "Volumetric Light Scattering as a Post-Process"
+
+
 const vec3 AURA_COLOR = vec3(1.0, 0.8, 0.4);
 const vec3 CORE_COLOR = vec3(1.0, 1.0, 0.9);
 const float AURA_RADIUS = 0.07;
