@@ -1,36 +1,32 @@
-//Temporal with the entire frame
-// vec4 pixel(vec2 uv)
-// {
-//     vec4 current = texture(source, uv);
-//     vec4 past = texture(history, uv);
+uniform float motionThreshold = 0.06; // slider(0.0, 0.5)
+uniform float maxMotion = 0.12;       // slider(0.01, 1.0)
+uniform float maxDecay = 0.75;        // slider(0.0, 1.0)
+uniform float offsetX = 0.003;        // slider(0.0, 0.05)
+uniform float offsetY = 0.0015;       // slider(0.0, 0.05)
 
-//     float decay = 0.50; //Delay remanence of the past frame
-
-//     return mix(current, past, decay);
-// }
-
-//Temporal with the entire frame and rgb différent offsets
+// Temporal with the entire frame and rgb différent offsets
 vec4 pixel(vec2 uv)
 {
     vec4 current = texture(source, uv);
     vec4 pastClean = texture(history, uv);
 
-    //If the model is not moving, put rgb back
+    // If the model is not moving, put rgb back
     // Motion delta
     float motion = length(current.rgb - pastClean.rgb);
 
-    if (motion < 0.06)
+    if (motion < motionThreshold)
     {
         return current;
     }
 
     // Speed factor [0, 1]
-    float motionFactor = smoothstep(0.06, 0.12, motion);
+    float motionFactor = smoothstep(motionThreshold, maxMotion, motion);
+    
     // Trail decay (0 if still)
-    float dynamicDecay = mix(0.0, 0.75, motionFactor);
+    float dynamicDecay = mix(0.0, maxDecay, motionFactor);
 
-    //Only during movement
-    vec2 offset = vec2(0.003, 0.0015) * motionFactor;
+    // Only during movement
+    vec2 offset = vec2(offsetX, offsetY) * motionFactor;
 
     float r = texture(history, uv + offset).r;
     float g = pastClean.g;
