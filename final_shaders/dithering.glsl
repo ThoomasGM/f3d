@@ -28,9 +28,9 @@
 // SOFTWARE.
 // ---------------------------------------------------------------------------
 
-uniform float colorNum = 16.0;
-uniform float bias = 0.0;
-uniform float pixelSize = 2.0;
+uniform float colorNum = 2.0; // slider(2.0, 16.0)
+uniform float bias = 0.88; // slider(-5.0, 5.0)
+uniform float pixelSize = 1.0; // slider(1.0, 16.0)
 
 const float bayerMatrix8x8[64] = float[64](
     0.0/ 64.0, 48.0/ 64.0, 12.0/ 64.0, 60.0/ 64.0,  3.0/ 64.0, 51.0/ 64.0, 15.0/ 64.0, 63.0/ 64.0,
