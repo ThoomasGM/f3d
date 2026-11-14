@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 // Glow: Based on https://learnopengl.com/Advanced-Lighting/Bloom
 // God rays: Based on GPU Gems 3 ch.13 "Volumetric Light Scattering as a Post-Process"
 
@@ -9,6 +10,24 @@ const float AURA_STRENGTH = 1.5;            // slider(0.1, 5)
 const float RIM_STRENGTH = 0.6;
 const float RAYS_STRENGTH = 0.30;           // slider(0.01, 2)
 const float BG_THRESHOLD = 0.03;
+=======
+// ---------------------------------------------------------------------------
+// Name    : Aura
+// Authors : Palpatoche8 <scheepers.thomas78@gmail.com>
+// Ref     : Original work
+// License : BSD-3-Clause (F3D)
+// ---------------------------------------------------------------------------
+
+const vec3 AURA_COLOR = vec3(1.0, 0.8, 0.4); // slider(0.0, 1.0)
+const vec3 CORE_COLOR = vec3(1.0, 1.0, 0.9); // slider(0.0, 1.0)
+const float AURA_RADIUS = 0.07; // slider(0.0, 0.2)
+const float AURA_STRENGTH = 1.5; // slider(0.0, 3.0)
+const float RIM_STRENGTH = 0.6; // slider(0.0, 2.0)
+const float RAYS_STRENGTH = 0.30; // slider(0.0, 1.0)
+const float BG_THRESHOLD = 0.03; // slider(0.0, 0.2)
+const int DIRS = 16; // slider(4, 32)
+const int STEPS = 6; // slider(1, 12)
+>>>>>>> Stashed changes
 
 
 float objectMask(vec2 uv, vec3 bg)
@@ -26,8 +45,6 @@ vec4 pixel(vec2 uv)
   float self = objectMask(uv, bg);
   float outside = 1.0 - self;
 
-  const int DIRS = 16;
-  const int STEPS = 6;
   float glow = 0.0;
   float ring = 0.0;
   float wsum = 0.0;

@@ -1,3 +1,11 @@
+// ---------------------------------------------------------------------------
+// Name    : Bloom
+// Authors : lance-leau <lancelot.dou7@gmail.com>
+// Ref     : Original work
+// License : BSD-3-Clause (F3D)
+// ---------------------------------------------------------------------------
+
+int radius = 15; // slider(1, 30)
 uniform float threshold = 0.55; // slider(0.0, 1.0)
 uniform float intensity = 1.5;  // slider(0.0, 10.0)
 uniform float spread = 1.0;     // slider(0.0, 1.0)

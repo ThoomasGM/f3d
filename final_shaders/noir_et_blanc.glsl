@@ -1,3 +1,10 @@
+// ---------------------------------------------------------------------------
+// Name    : Noir et blanc
+// Authors : lance-leau <lancelot.dou7@gmail.com>
+// Ref     : Original work
+// License : BSD-3-Clause (F3D)
+// ---------------------------------------------------------------------------
+
 // Filtre noir et blanc pour F3D (option --final-shader)
 // Exemple d'apprentissage : ne pas copier-coller dans une contribution (voir AI_POLICY.md).
 //

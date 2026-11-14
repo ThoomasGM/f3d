@@ -1,10 +1,11 @@
+// ---------------------------------------------------------------------------
+// Name    : Sigmoid contrast
+// Authors : mno <alex.dreau@epita.fr>
+// Ref     : Sigmoid contrast by Loadus - https://www.shadertoy.com/view/MtX3z2
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
 
-
-
-
-//https://www.shadertoy.com/view/MtX3z2
-
-float gamma = 0.5;
+float gamma = 0.5; // slider(0.1, 3.0)
 
 float cubic(float value)
 {

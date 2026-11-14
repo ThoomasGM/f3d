@@ -1,6 +1,13 @@
-const float STEP = 1.0;
+// ---------------------------------------------------------------------------
+// Name    : Sobel
+// Authors : mno <alex.dreau@epita.fr>
+// Ref     : Basic sobel filter by Jeroen Baert (www.forceflow.be) - https://www.shadertoy.com/view/Xdf3Rf
+// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// ---------------------------------------------------------------------------
 
-const vec3 gold = vec3(1.0, 0.800, 0.333);
+const float STEP = 1.0; // slider(0.5, 5.0)
+
+const vec3 gold = vec3(1.0, 0.800, 0.333); // slider(0.0, 1.0)
 
 float intensity(vec4 color) {
     return length(color.rgb);
