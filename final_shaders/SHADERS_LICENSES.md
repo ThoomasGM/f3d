@@ -19,6 +19,15 @@ Créations originales des auteurs du projet.
 | `sepia.glsl` | mno |
 | `temporal_echo.glsl` | thomas.graveline-mercier |
 
+## Shaders sous MIT — compatibles avec BSD-3
+
+Adaptés de code sous licence MIT : compatible avec BSD-3, à condition de conserver la
+notice de copyright et le texte de la licence MIT (présents en en-tête du shader).
+
+| Shader | Adapté par | Source | Auteur original |
+|---|---|---|---|
+| `dithering.glsl` | Erwan Le Grand | https://blog.maximeheckel.com/posts/the-art-of-dithering-and-retro-shading-web/ (code : https://github.com/MaximeHeckel/blog.maximeheckel.com, `core/components/MDX/Widgets/Retro/pixel.ts`) | Maxime Heckel |
+
 ## Shaders sous CC BY-NC-SA 3.0 — ⚠️ incompatibles avec BSD-3
 
 Adaptés de shaders Shadertoy dont l'auteur n'a pas précisé de licence : la licence par
