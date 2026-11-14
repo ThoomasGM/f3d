@@ -1,7 +1,6 @@
-uniform float threshold = 0.55; // slider(0.0, 1.0, 0.55)
-uniform float intensity = 1.5;  // slider(0.0, 10.0, 1.5)
-uniform float spread = 1.0;     // slider(0.0, 1.0, 1.0)
-uniform int radius = 15;        // slider(0.0, 20.0, 15.0)
+uniform float threshold = 0.55; // slider(0.0, 1.0)
+uniform float intensity = 1.5;  // slider(0.0, 10.0)
+uniform float spread = 1.0;     // slider(0.0, 1.0)
 
 vec4 pixel(vec2 uv)
 {
@@ -9,9 +8,6 @@ vec4 pixel(vec2 uv)
 
   vec2 texelSize = 1.0 / vec2(textureSize(source, 0));
 
-  float threshold = 0.55;
-  float intensity = 1.5;
-  float spread = 1.0;
   int radius = 15;
 
   vec3 bloom = vec3(0.0);

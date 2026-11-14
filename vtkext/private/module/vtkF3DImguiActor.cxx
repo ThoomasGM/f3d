@@ -1452,16 +1452,26 @@ void vtkF3DImguiActor::StartFrame(vtkOpenGLRenderWindow* renWin)
 }
 
 //----------------------------------------------------------------------------
+void RenderFinalShaderSlider(vtkOpenGLRenderWindow* renWin)
+{
+  vtkF3DRenderer* ren = vtkF3DRenderer::SafeDownCast(renWin->GetRenderers()->GetFirstRenderer());
+  if (ren->shaderSlider.isActive)
+  {
+    if (ImGui::SliderFloat(ren->shaderSlider.name.c_str(), &ren->shaderSlider.defaultValue,
+          ren->shaderSlider.min, ren->shaderSlider.max))
+    {
+      renWin->GetInteractor()->InvokeEvent(vtkF3DUserEvents::SceneHierarchyChangedEvent, nullptr);
+    }
+  }
+}
+
+//----------------------------------------------------------------------------
 void RenderFinalShaderDropdown()
 {
   namespace fs = std::filesystem;
   const fs::path dir = fs::path(__FILE__).parent_path() / "../../../final_shaders";
 
-  ImGui::SetNextWindowPos(
-    ImVec2(ImGui::GetMainViewport()->WorkSize.x, 0.f), ImGuiCond_Always, ImVec2(1.f, 0.f));
-  ImGui::Begin("FinalShaderDropdown", nullptr,
-    ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
-  if (ImGui::BeginCombo("", "Select Shader"))
+  if (ImGui::BeginCombo("##shader", "Select Shader"))
   {
     std::error_code err_code;
     for (const fs::directory_entry& entry : fs::directory_iterator(dir, err_code))
@@ -1485,13 +1495,20 @@ void RenderFinalShaderDropdown()
     }
     ImGui::EndCombo();
   }
-  ImGui::End();
 }
 
 //----------------------------------------------------------------------------
 void vtkF3DImguiActor::EndFrame(vtkOpenGLRenderWindow* renWin)
 {
+  // One panel in the top right corner: shader dropdown, then the slider under it
+  ImGui::SetNextWindowPos(
+    ImVec2(ImGui::GetMainViewport()->WorkSize.x, 0.f), ImGuiCond_Always, ImVec2(1.f, 0.f));
+  ImGui::Begin("FinalShaderPanel", nullptr,
+    ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
   ::RenderFinalShaderDropdown();
+  ::RenderFinalShaderSlider(renWin);
+  ImGui::End();
+
   ImGui::Render();
   this->Pimpl->RenderDrawData(renWin, ImGui::GetDrawData());
 }

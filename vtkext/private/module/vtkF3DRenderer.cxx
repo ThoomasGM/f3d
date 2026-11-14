@@ -116,6 +116,7 @@
 #include <chrono>
 #include <cmath>
 #include <numbers>
+#include <cstdio>
 #include <sstream>
 
 namespace
@@ -611,18 +612,6 @@ void vtkF3DRenderer::ConfigureRenderPasses()
       userP->SetUserShader(this->FinalShader.value().c_str());
       userP->SetDelegatePass(renderingPass);
       renderingPass = userP;
-
-      /*
-      std::string uniformName;
-      float defaultValue;
-      float minValue;
-      float maxValue;
-      std::sscanf(this->FinalShader.value().c_str(),
-      "uniform float %63[^;] = %f; // slider(%f, %f)", uniformName, &defaultValue, &minValue,
-      &maxValue);
-
-      userP->QuadHelper->Program->SetUniformf(uniformName.c_str(), defaultValue);
-      */
     }
     else
     {
@@ -2181,20 +2170,21 @@ void vtkF3DRenderer::SetFinalShader(const std::optional<std::string>& finalShade
     this->FinalShader = finalShader;
     this->RenderPassesConfigured = false;
 
-    std::string uniformName;
-    float defaultValue;
-    float minValue;
-    float maxValue;
-
-    if (this->FinalShader.value().length() != 0)
+    if (finalShader.has_value())
     {
-
-      int filledVarCount = std::sscanf(this->FinalShader.value().c_str(),
-        " uniform float %63[^ =] = %f ; // slider(%f, %f)", uniformName.c_str(), &defaultValue,
-        &minValue, &maxValue);
-
-      this->SetShaderSliders(uniformName, defaultValue, minValue, maxValue,
-        filledVarCount != EOF && filledVarCount == 4);
+      char name[64];
+      float defaultValue = 0.f;
+      float minValue = 0.f;
+      float maxValue = 0.f;
+      int filledVarCount = std::sscanf(finalShader.value().c_str(),
+        " uniform float %63[^ =] = %f ; // slider(%f, %f)", name, &defaultValue, &minValue,
+        &maxValue);
+      this->SetShaderSliders(filledVarCount == 4 ? std::string(name) : std::string(),
+        defaultValue, minValue, maxValue, filledVarCount == 4);
+    }
+    else
+    {
+      this->shaderSlider.isActive = false;
     }
   }
 }
