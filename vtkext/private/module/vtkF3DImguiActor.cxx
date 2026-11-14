@@ -1456,21 +1456,24 @@ void RenderFinalShaderDropdown()
 {
   namespace fs = std::filesystem;
   const fs::path dir = fs::path(__FILE__).parent_path() / "../../../final_shaders";
+  static std::string selectedShader;
 
   ImGui::SetNextWindowPos(
     ImVec2(ImGui::GetMainViewport()->WorkSize.x, 0.f), ImGuiCond_Always, ImVec2(1.f, 0.f));
   ImGui::Begin("FinalShaderDropdown", nullptr,
     ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
-  if (ImGui::BeginCombo("", "Select Shader"))
+  const char* preview = selectedShader.empty() ? "Select Shader" : selectedShader.c_str();
+  if (ImGui::BeginCombo("##FinalShader", preview))
   {
     std::error_code err_code;
     for (const fs::directory_entry& entry : fs::directory_iterator(dir, err_code))
     {
       std::string fileName = entry.path().filename().string();
       std::string filePath = entry.path().string();
-
-      if (ImGui::Selectable(fileName.c_str()))
+      const bool isSelected = (fileName == selectedShader);
+      if (ImGui::Selectable(fileName.c_str(), isSelected))
       {
+        selectedShader = fileName;
         std::ifstream file(filePath.c_str());
         std::string shaderCode;
         std::string line;
@@ -1482,11 +1485,16 @@ void RenderFinalShaderDropdown()
         vtkOutputWindow::GetInstance()->InvokeEvent(
           vtkF3DUserEvents::TriggerEvent, (void*)command.c_str());
       }
+      if (isSelected)
+      {
+        ImGui::SetItemDefaultFocus();
+      }
     }
     ImGui::EndCombo();
   }
   ImGui::End();
 }
+
 
 //----------------------------------------------------------------------------
 void vtkF3DImguiActor::EndFrame(vtkOpenGLRenderWindow* renWin)
