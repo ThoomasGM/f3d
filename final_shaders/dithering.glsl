@@ -1,6 +1,36 @@
-uniform float colorNum = 16.0;
-uniform float bias = 0.0;
-uniform float pixelSize = 2.0;
+// ---------------------------------------------------------------------------
+// Name    : Dithering
+// Authors : Erwan Le Grand <erwan.legrand49@gmail.com>
+// Ref     : The Art of Dithering and Retro Shading for the Web by Maxime Heckel
+//           https://blog.maximeheckel.com/posts/the-art-of-dithering-and-retro-shading-web/
+//           (code from https://github.com/MaximeHeckel/blog.maximeheckel.com,
+//            core/components/MDX/Widgets/Retro/pixel.ts)
+// License : MIT (original code), see notice below
+// ---------------------------------------------------------------------------
+// Copyright (c) 2024 Maxime Heckel
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+// ---------------------------------------------------------------------------
+
+uniform float colorNum = 2.0; // slider(2.0, 16.0)
+uniform float bias = 0.88; // slider(-5.0, 5.0)
+uniform float pixelSize = 1.0; // slider(1.0, 16.0)
 
 const float bayerMatrix8x8[64] = float[64](
     0.0/ 64.0, 48.0/ 64.0, 12.0/ 64.0, 60.0/ 64.0,  3.0/ 64.0, 51.0/ 64.0, 15.0/ 64.0, 63.0/ 64.0,

@@ -1,15 +1,15 @@
 // ---------------------------------------------------------------------------
 // Name    : CRT
-// Authors : Jules Caron <jules.caron@epita.fr>
-// Ref     : CRT by kbjwes77 - https://www.shadertoy.com/view/WsVSzV
-// License : CC BY-NC-SA 3.0 (Shadertoy default, no license stated by author)
+// Authors : Jules Caron <jules.caron44@gmail.com>
+// Ref     : Original work
+// License : BSD-3-Clause (F3D)
 // ---------------------------------------------------------------------------
 
-float warp = 1.00; // slider(0.0, 2.0)
-float scan = 2.00; // slider(0.0, 2.0)
+uniform float scan_size = 1.00; // slider(0.95, 1.045)
+uniform float scan_speed = 6.50; //slider(0.0, 30.0)
 
 vec4 pixel(vec2 uv)
 {
-    float wave = abs(sin((uv * resolution.xy).y + time));
-    return vec4(mix(texture(source, uv).rgb,vec3(0.0),wave),1.0);
+    float wave = abs(sin(((uv * resolution.xy).y + time * scan_speed) * scan_size));
+    return vec4(mix(texture(source, uv).rgb, vec3(0.0), wave), 1.0);
 }
