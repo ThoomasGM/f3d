@@ -1452,13 +1452,13 @@ void vtkF3DImguiActor::StartFrame(vtkOpenGLRenderWindow* renWin)
 }
 
 //----------------------------------------------------------------------------
+// TODO lancelot
 void RenderFinalShaderSlider(vtkOpenGLRenderWindow* renWin)
 {
   vtkF3DRenderer* ren = vtkF3DRenderer::SafeDownCast(renWin->GetRenderers()->GetFirstRenderer());
-  if (ren->shaderSlider.isActive)
+  for (auto& slider : ren->shaderSliders)
   {
-    if (ImGui::SliderFloat(ren->shaderSlider.name.c_str(), &ren->shaderSlider.defaultValue,
-          ren->shaderSlider.min, ren->shaderSlider.max))
+    if (ImGui::SliderFloat(slider.name.c_str(), &slider.defaultValue, slider.min, slider.max))
     {
       renWin->GetInteractor()->InvokeEvent(vtkF3DUserEvents::SceneHierarchyChangedEvent, nullptr);
     }
@@ -1503,8 +1503,8 @@ void vtkF3DImguiActor::EndFrame(vtkOpenGLRenderWindow* renWin)
   // One panel in the top right corner: shader dropdown, then the slider under it
   ImGui::SetNextWindowPos(
     ImVec2(ImGui::GetMainViewport()->WorkSize.x, 0.f), ImGuiCond_Always, ImVec2(1.f, 0.f));
-  ImGui::Begin("FinalShaderPanel", nullptr,
-    ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
+  ImGui::Begin(
+    "FinalShaderPanel", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize);
   ::RenderFinalShaderDropdown();
   ::RenderFinalShaderSlider(renWin);
   ImGui::End();

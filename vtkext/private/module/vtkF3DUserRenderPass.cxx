@@ -107,10 +107,9 @@ void vtkF3DUserRenderPass::Render(const vtkRenderState* s)
   else
   {
     this->QuadHelper->Program->SetUniformf("time", ren->GetTotalTime());
-    if (ren->shaderSlider.isActive)
+    for (const auto& slider : ren->shaderSliders)
     {
-      this->QuadHelper->Program->SetUniformf(
-        ren->shaderSlider.name.c_str(), ren->shaderSlider.defaultValue);
+      this->QuadHelper->Program->SetUniformf(slider.name.c_str(), slider.defaultValue);
     }
   }
 

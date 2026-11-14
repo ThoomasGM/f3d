@@ -224,22 +224,22 @@ public:
     float defaultValue;
     float min;
     float max;
-    bool isActive;
   };
 
-  ShaderSlider shaderSlider;
-  ShaderSlider GetShaderSlider()
+  std::vector<ShaderSlider> shaderSliders;
+  std::vector<ShaderSlider> GetShaderSlider()
   {
-    return this->shaderSlider;
+    return this->shaderSliders;
   }
-  void SetShaderSliders(
-    std::string _name, float _defaultValue, float _min, float _max, bool _isActive)
+
+  void AddShaderSliders(std::string name, float defaultValue, float min, float max)
   {
-    shaderSlider.name = _name;
-    shaderSlider.defaultValue = _defaultValue;
-    shaderSlider.min = _min;
-    shaderSlider.max = _max;
-    shaderSlider.isActive = _isActive;
+    this->shaderSliders.push_back(ShaderSlider{ name, defaultValue, min, max });
+  }
+
+  void ClearSliders()
+  {
+    this->shaderSliders.clear();
   }
 
   ///@}

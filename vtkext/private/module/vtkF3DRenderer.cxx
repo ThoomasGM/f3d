@@ -115,8 +115,8 @@
 #include <cctype>
 #include <chrono>
 #include <cmath>
-#include <numbers>
 #include <cstdio>
+#include <numbers>
 #include <sstream>
 
 namespace
@@ -2169,22 +2169,26 @@ void vtkF3DRenderer::SetFinalShader(const std::optional<std::string>& finalShade
   {
     this->FinalShader = finalShader;
     this->RenderPassesConfigured = false;
-
-    if (finalShader.has_value())
+    this->ClearSliders();
+    if (!finalShader.has_value())
+    {
+      return;
+    }
+    std::istringstream final_shader_stream;
+    final_shader_stream.str(finalShader.value().c_str());
+    for (std::string line; std::getline(final_shader_stream, line);)
     {
       char name[64];
       float defaultValue = 0.f;
       float minValue = 0.f;
       float maxValue = 0.f;
-      int filledVarCount = std::sscanf(finalShader.value().c_str(),
-        " uniform float %63[^ =] = %f ; // slider(%f, %f)", name, &defaultValue, &minValue,
-        &maxValue);
-      this->SetShaderSliders(filledVarCount == 4 ? std::string(name) : std::string(),
-        defaultValue, minValue, maxValue, filledVarCount == 4);
-    }
-    else
-    {
-      this->shaderSlider.isActive = false;
+      int filledVarCount =
+        std::sscanf(line.c_str(), " uniform float %63[^ =] = %f ; // slider(%f, %f)", name,
+          &defaultValue, &minValue, &maxValue);
+      if (filledVarCount == 4)
+      {
+        this->AddShaderSliders(std::string(name), defaultValue, minValue, maxValue);
+      }
     }
   }
 }
