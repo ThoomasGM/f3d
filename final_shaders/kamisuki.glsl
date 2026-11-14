@@ -1,6 +1,18 @@
-//By : https://www.shadertoy.com/view/7clyWr
+// By : https://www.shadertoy.com/view/7clyWr
 
 #define PI acos(-1.)
+
+uniform float scale = 20.0;        // slider(1.0, 100.0)
+uniform float speed = 1.0;         // slider(0.0, 5.0)
+uniform float wavesBase = 1.0;     // slider(0.5, 10.0)
+uniform float wavesAmp = 3.0;      // slider(0.0, 10.0)
+uniform float maxRotation = 1.0;   // slider(0.0, 2.0)
+uniform float radiusFactor = 0.5;  // slider(0.0, 2.0)
+uniform float blending = 0.125;    // slider(0.01, 0.5)
+uniform float threshold = 0.5;     // slider(0.0, 1.0)
+uniform float edgeSmooth = 4.0;    // slider(0.5, 20.0)
+uniform float shadowMult = 0.7;    // slider(0.0, 1.0)
+uniform float highlightMult = 1.3; // slider(1.0, 2.5)
 
 // "Hash without Sine" by Dave_Hoskins
 // https://www.shadertoy.com/view/4djSRW
@@ -52,20 +64,21 @@ vec4 pixel(vec2 uv)
 {
     float aspect = float(resolution.x) / float(resolution.y);
     vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
+    float t = time * speed;
 
     float n = KamisukiNoise(
-        p * 20.0,
-        (sin(time * 0.5) * 0.5 + 0.5) * 3.0 + 1.0,
-        PI * (sin(time) * 0.5 + 0.5),
-        0.5 * p.x,
-        0.125
+        p * scale,
+        (sin(t * 0.5) * 0.5 + 0.5) * wavesAmp + wavesBase,
+        (PI * maxRotation) * (sin(t) * 0.5 + 0.5),
+        radiusFactor * p.x,
+        blending
     );
 
-    n = smoothstep(0.5, 0.5 + (1.0 / float(resolution.y)) * 4.0, n);
+    n = smoothstep(threshold, threshold + (1.0 / float(resolution.y)) * edgeSmooth, n);
 
     vec4 scene = texture(source, uv);
 
-    vec3 result = scene.rgb * mix(0.7, 1.3, n);
+    vec3 result = scene.rgb * mix(shadowMult, highlightMult, n);
 
     return vec4(result, scene.a);
 }
